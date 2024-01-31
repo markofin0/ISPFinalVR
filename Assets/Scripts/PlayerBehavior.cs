@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class PlayerBehavior : MonoBehaviour
 {
-    
-    // Movement speed of the player.
-    public float moveSpeed = 10f;
+    private const float walkSpeed = 5.0f;
+    private const float runSpeed = 10.0f;
+
+    private float moveSpeed = walkSpeed;    // Our current movement speed
 
     // Rotation speed of the player.
     public float rotateSpeed = 75f;
@@ -33,8 +34,21 @@ public class PlayerBehavior : MonoBehaviour
     void Update()
     {
         // Capture input for vertical and horizontal movement.
-        vInput = Input.GetAxis("Vertical") * moveSpeed;
-        hInput = Input.GetAxis("Horizontal") * rotateSpeed;
+        vInput = Input.GetAxis("Vertical");
+        hInput = Input.GetAxis("Horizontal");
+
+        // Toggle between walk and run speeds based on shift key
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            moveSpeed = runSpeed;
+        }
+        else
+        {
+            moveSpeed = walkSpeed;
+        }
+
+        // Apply movement speed to vertical input.
+        vInput *= moveSpeed;
     }
 
     void FixedUpdate()
@@ -43,7 +57,7 @@ public class PlayerBehavior : MonoBehaviour
         Vector3 rotation = Vector3.up * hInput;
 
         // Convert the rotation vector into a Quaternion representing the rotation over time.
-        Quaternion angleRot = Quaternion.Euler(rotation * Time.fixedDeltaTime);
+        Quaternion angleRot = Quaternion.Euler(rotation * rotateSpeed * Time.fixedDeltaTime);
 
         // Move the Rigidbody's position forward based on the vertical input.
         _rb.MovePosition(this.transform.position + this.transform.forward * vInput * Time.fixedDeltaTime);
