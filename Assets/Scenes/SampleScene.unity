@@ -1104,9 +1104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d2e874abd6c3d944bd621c809154578, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  labelText: Avoid the vehicles!!!
-  showWinScreen: 0
-  points: 1000
+  basePoints: 1000
+  score: 1000
 --- !u!4 &695204004
 Transform:
   m_ObjectHideFlags: 0
@@ -2173,8 +2172,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ded9dc254a230e44b6743ad92ad88d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingPoints: 1000
-  pointsText: {fileID: 1419922380}
 --- !u!114 &1419922380
 MonoBehaviour:
   m_ObjectHideFlags: 0

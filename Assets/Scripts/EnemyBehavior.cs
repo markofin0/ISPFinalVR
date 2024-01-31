@@ -18,6 +18,7 @@ public class EnemyBehavior : MonoBehaviour
 
             // Reset the player's position to the start position.
             playerBehavior.ResetToStartPosition();
+            GameBehavior.Instance.DecrementPoints(100);
 
             // Prints a message indicating that the player is detected, and the enemy should attack.
             Debug.Log("Player detected - reset to start position!");

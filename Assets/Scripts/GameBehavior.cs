@@ -1,56 +1,50 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameBehavior : MonoBehaviour
 {
-    public string labelText = "Avoid the vehicles!!!";
-    public bool showWinScreen = false;
-    public int points = 1000;
+    private static GameBehavior _instance;
 
-    void OnGUI()
+    public static GameBehavior Instance
     {
-        GUI.Box(new Rect(20, 20, 150, 25), "Points: " + points);
-        GUI.Label(new Rect(Screen.width / 2 - 100, Screen.height - 50, 300, 50), labelText);
-
-        if (showWinScreen)
+        get
         {
-            if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 50, 200, 100), "YOU WON!"))
+            if (_instance == null)
             {
-                SceneManager.LoadScene(0);
-                Time.timeScale = 1.0f;
+                _instance = FindObjectOfType<GameBehavior>();
+                if (_instance == null)
+                {
+                    GameObject singleton = new GameObject("GameManagerSingleton");
+                    _instance = singleton.AddComponent<GameBehavior>();
+                    DontDestroyOnLoad(singleton); // Ensure the GameObject persists across scenes
+                }
             }
+            return _instance;
         }
     }
 
-    // Decrease points when player collides with a car
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Van"))
-        {
-            DecrementPoints(100);
-        }
+    public int basePoints = 1000; // Base points
+    public int score = 1000;
 
-        if (collision.gameObject.CompareTag("EndOfLevel"))
+    private void Awake()
+    {
+        if (_instance == null)
         {
-            LoadNextLevel();
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 
     // Method to decrement points
     public void DecrementPoints(int amount)
     {
-        points -= amount;
-        if (points <= 0)
+        score -= amount;
+        if (score < 0)
         {
-            labelText = "Game Over! You Lost!";
-            Time.timeScale = 0.0f; // Pause the game
+            score = 0; // Ensure score doesn't go negative
         }
-    }
-
-    // Method to load the next level
-    void LoadNextLevel()
-    {
-        // Assuming the next level is at build index 1, you can change it to the appropriate index
-        SceneManager.LoadScene(1);
     }
 }

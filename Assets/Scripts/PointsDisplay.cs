@@ -3,28 +3,29 @@ using UnityEngine.UI;
 
 public class PointsDisplay : MonoBehaviour
 {
-    public int startingPoints = 1000;
-    private int currentPoints;
+    private Text scoreText;
 
-    public Text pointsText;
-
-    void Start()
+    private void Start()
     {
-        currentPoints = startingPoints;
-        UpdatePointsDisplay();
+        // Find the Text component
+        scoreText = GetComponent<Text>();
+
+        // Update the text initially
+        UpdateScoreText();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void Update()
     {
-        if (collision.gameObject.CompareTag("Van"))
-        {
-            currentPoints -= 100;
-            UpdatePointsDisplay();
-        }
+        // Update the text every frame
+        UpdateScoreText();
     }
 
-    void UpdatePointsDisplay()
+    private void UpdateScoreText()
     {
-        pointsText.text = "Points: " + currentPoints.ToString();
+        // Get the current score from the GameManager
+        int currentScore = GameBehavior.Instance.score;
+
+        // Update the text to display the current score
+        scoreText.text = "Score: " + currentScore.ToString();
     }
 }
